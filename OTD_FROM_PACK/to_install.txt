@@ -1,0 +1,14 @@
+ksh
+binutils
+compat-libcap1
+compat-libstdc++-33
+libgcc
+libstdc++
+libstdc++-devel
+sysstat
+gcc
+gcc-c++
+glibc
+glibc-devel
+libaio
+libaio-devel

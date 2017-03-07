@@ -1,0 +1,194 @@
+{
+	"relationships": [{
+		"oplan": "cern-anappi-launchplan",
+		"to_oplan": "cern storage volumes",
+		"type": "depends"
+	}, {
+		"oplan": "cern-anappi-launchplan",
+		"to_oplan": "cern-ip-reservations",
+		"type": "depends"
+	}, {
+	   "oplan": "cern-wlsadmin-ssh-access-rules",
+	   "to_oplan": "cern-anappi-seclists",
+	   "type": "depends"
+	},{
+	   "oplan": "cern-wls-console-access-rule",
+	   "to_oplan": "cern-anappi-seclists",
+	   "type": "depends"
+	},{
+	   "oplan": "cern-wls-console-access-rule",
+	   "to_oplan": "cern-wls-console-app",
+	   "type": "depends"
+	},{
+	   "oplan": "cern-lb-access-rule",
+	   "to_oplan": "cern-anappi-seclists",
+	   "type": "depends"
+	},{
+	   "oplan": "cern-lb-access-rule",
+	   "to_oplan": "cern-lb-app",
+	   "type": "depends"
+	}
+
+
+	],
+	"description": "CERN orchestration",
+	"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/CERNorchestration",
+	"schedule": {
+		"start_time": "2017-01-01T00:00:01Z",
+		"stop_time": null
+	},
+	"oplans": [{
+				"obj_type": "launchplan",
+				"label": "cern-anappi-launchplan",
+				"objects": [{
+					"relationships": [{
+							"instances": [
+								"vm-admin",
+								"vm-managed1",
+								"vm-lb"
+							],
+							"type": "different_node"
+						}
+					],
+					"instances": [{
+						"shape": "oc3",
+						"label": "vm-admin",
+						"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/CERNanappiComputeAdmin",
+						"hostname": "CERNanappiComputeAdmin",
+						"imagelist": "/oracle/public/OL_7.2_UEKR3_x86_64",
+						"sshkeys": ["/Compute-IDPROJECT/Antonio.Nappi@cern.ch/anappi-key"],
+						"networking": {
+							"eth0":{
+							    "nat": "ipreservation:/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-reservation-admin",
+							    "seclists": ["/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-seclist"]
+							}
+						},
+						"storage_attachments": [{
+							"index": 1,
+							"volume": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-admin-storage"
+						}]
+					}, {
+						"shape": "oc3",
+						"label": "vm-managed1",
+						"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/CERNanappiComputeManaged1",
+						"hostname": "CERNanappiComputeManaged1",
+						"imagelist": "/oracle/public/OL_7.2_UEKR3_x86_64",
+						"sshkeys": ["/Compute-IDPROJECT/Antonio.Nappi@cern.ch/anappi-key"],
+						"networking": {
+							"eth0" : {
+                                                                "nat": "ipreservation:/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-reservation-managed1",
+								"seclists": ["/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-seclist"]
+							}
+						},
+						"storage_attachments": [{
+							"index": 1,
+							"volume": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-managed1-storage"
+						}]
+					},{
+						"shape": "oc3",
+						"label": "vm-lb",
+						"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/CERNanappiLoadBalancer",
+						"hostname": "CERNanappiLoadBalancer",
+						"imagelist": "/oracle/public/OL_7.2_UEKR3_x86_64",
+						"sshkeys": ["/Compute-IDPROJECT/Antonio.Nappi@cern.ch/anappi-key"],
+						"networking": {
+							"eth0" : {
+								"nat": "ipreservation:/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-reservation-lb",
+								"seclists": ["/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-seclist"]
+							}
+						},
+						"storage_attachments": [{
+							"index": 1,
+							"volume": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-lb-storage"
+						}]
+					}]
+				}]
+			}, {
+				"label": "cern-anappi-seclists",
+				"obj_type": "seclist",
+				"objects": [{
+					"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-seclist"
+				}]
+			}, {
+				"label": "cern-ip-reservations",
+				"obj_type": "ip/reservation",
+				"objects": [{
+					"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-reservation-admin",
+					"parentpool": "/oracle/public/ippool",
+					"permanent": true
+				},{
+					"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-reservation-lb",
+					"parentpool": "/oracle/public/ippool",
+					"permanent": true
+				},{
+					"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-reservation-managed1",
+					"parentpool": "/oracle/public/ippool",
+					"permanent": true
+				}]
+			}, {
+				"label": "cern storage volumes",
+				"obj_type": "storage/volume",
+				"objects": [{
+					"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-admin-storage",
+					"properties": ["/oracle/public/storage/default"],
+					"size": "40G"
+
+				}, {
+					"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-managed1-storage",
+					"properties": ["/oracle/public/storage/default"],
+					"size": "40G"
+				},{
+					"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-lb-storage",
+					"properties": ["/oracle/public/storage/default"],
+					"size": "40G"
+				}
+				]
+			},{
+				"label": "cern-wlsadmin-ssh-access-rules",
+				"obj_type": "secrule",
+				"objects":[{
+				        "name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-wlsadmin-ssh-access-rule",
+					"application": "/oracle/public/ssh",
+					"src_list": "seciplist:/oracle/public/public-internet",
+					"dst_list": "seclist:/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-seclist",
+					"action" : "PERMIT"
+				}]
+			},{
+				"label": "cern-wls-console-access-rule",
+				"obj_type": "secrule",
+				"objects":[{
+					"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-wls-console-access-rule",
+					"application": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-wls-console-app",
+					"src_list": "seciplist:/oracle/public/public-internet",
+					"dst_list": "seclist:/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-seclist",
+					"action" : "PERMIT"
+				}]
+			},{
+				"label": "cern-lb-access-rule",
+				"obj_type": "secrule",
+				"objects":[{
+					"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-lb-acceess-rule",
+					"application": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-lb-app",
+					"src_list": "seciplist:/oracle/public/public-internet",
+					"dst_list": "seclist:/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-anappi-seclist",
+					"action" : "PERMIT"
+				}]
+			},{
+				"label": "cern-wls-console-app",
+				"obj_type": "secapplication",
+				"objects": [{
+					"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-wls-console-app",
+					"dport": 7001,
+					"protocol": "tcp"
+				}]
+			},{
+				"label": "cern-lb-app",
+				"obj_type": "secapplication",
+				"objects": [{
+					"name": "/Compute-IDPROJECT/Antonio.Nappi@cern.ch/cern-lb-app",
+					"dport": 8080,
+					"protocol": "tcp"
+				}]
+			}
+				]
+			}
